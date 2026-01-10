@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python solution.py:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}
