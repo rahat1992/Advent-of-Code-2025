@@ -37,6 +37,11 @@ Solutions are meant to be run from within each day directory so that relative pa
     - `cd Day3`
     - Run the solution (reads `Day3/input.txt`):
       - `python3 solution.py`
+- **Day 4**
+  - From the repository root:
+    - `cd Day4`
+    - Run the solution (reads `Day4/input.txt`):
+      - `python3 solution.py`
 
 **Pattern for new days:** create a `DayN/` directory with a `solution.py` that reads `input.txt` from the current working directory, then run it by `cd DayN && python3 solution.py`.
 
@@ -48,11 +53,13 @@ Each day has a dedicated `test_solution.py` using `unittest`. Tests are designed
   - Day 1: `cd Day1 && python3 -m unittest`
   - Day 2: `cd Day2 && python3 -m unittest`
   - Day 3: `cd Day3 && python3 -m unittest`
+  - Day 4: `cd Day4 && python3 -m unittest`
 
 - **Run a specific test module**
   - Day 1: `cd Day1 && python3 -m unittest test_solution`
   - Day 2: `cd Day2 && python3 -m unittest test_solution`
   - Day 3: `cd Day3 && python3 -m unittest test_solution`
+  - Day 4: `cd Day4 && python3 -m unittest test_solution`
 
 - **Run a single test case or method**
   - Example (Day 1, specific test method):
@@ -61,6 +68,8 @@ Each day has a dedicated `test_solution.py` using `unittest`. Tests are designed
     - `cd Day2 && python3 -m unittest test_solution.TestGiftShop`
   - Example (Day 3, full test case class):
     - `cd Day3 && python3 -m unittest test_solution.TestLobby`
+  - Example (Day 4, full test case class):
+    - `cd Day4 && python3 -m unittest test_solution.TestPrintingDepartment`
 
 When running tests from the repository root via discovery (e.g., `python3 -m unittest discover -s Day1 -p "test_*.py"`), note that tests which reference `input.txt` use a relative path; those checks will only run if `input.txt` is present in the **current working directory**.
 
@@ -111,6 +120,20 @@ Each Advent of Code day is isolated in its own directory, following a consistent
     - Covers the example banks and totals from the problem statement.
     - Exercises the selector with ascending, descending, repeated, and mixed digits, and multiple `n` values (including near full-length selections).
     - Optionally validates the actual puzzle answers for both parts when `input.txt` exists.
+
+- **Day 4 (`Day4/`) – Printing Department / Paper Rolls**
+  - `solution.py` defines:
+    - `count_adjacent_rolls(grid, row, col)` – counts neighboring rolls (`@`) in the 8 surrounding cells.
+    - `count_accessible_rolls(grid)` – counts how many rolls have fewer than 4 adjacent rolls (forklift-accessible in the current grid).
+    - `remove_accessible_rolls(grid)` – removes all currently accessible rolls in a single pass and returns the updated grid and removed count.
+    - `count_total_removable_rolls(grid)` – repeatedly removes accessible rolls until none remain and returns the total removed.
+    - `solve_part1(input_file)` – reads the grid and returns the number of accessible rolls in the initial configuration.
+    - `solve_part2(input_file)` – returns the total number of rolls that can be removed by repeated passes.
+  - `Day4/README.md` describes the grid model, accessibility rule, and iterative removal process for both parts.
+  - `test_solution.py`:
+    - Exercises adjacency counting on corners, edges, center cells, and isolated rolls.
+    - Verifies accessibility counts on dense clusters, lines, crosses, and sparse patterns, including boundary cases for exactly 3 vs 4 neighbors.
+    - Confirms the iterative removal logic on the example and synthetic grids, and validates the actual puzzle answers when `input.txt` exists.
 
 ### Extending the repository
 

@@ -322,6 +322,22 @@ class TestPrintingDepartment(unittest.TestCase):
         # All 5 rolls have < 4 adjacent (at most 2), so all removed in one pass
         self.assertEqual(count_total_removable_rolls(grid), 5)
 
+    def test_count_total_removable_rolls_truly_multiple_iterations(self):
+        """Test a case that truly requires multiple iterations."""
+        grid = [
+            "..@..",
+            ".@@@.",
+            "@@@@@",
+            ".@@@.",
+            "..@.."
+        ]
+        # This diamond pattern should be removed layer by layer
+        # First pass: outer corners and edges with < 4 adjacent
+        # Subsequent passes: inner rolls become accessible
+        result = count_total_removable_rolls(grid)
+        # All 13 rolls should eventually be removed
+        self.assertEqual(result, 13)
+
     def test_count_total_removable_rolls_empty(self):
         """Test with an empty grid."""
         grid = [
