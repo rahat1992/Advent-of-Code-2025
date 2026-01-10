@@ -108,6 +108,15 @@ class TestLobby(unittest.TestCase):
         self.assertEqual(find_max_joltage("1239456789"), 99)
 
     # Part 2 Tests
+    def test_find_max_joltage_n_batteries_near_full_length(self):
+        """Test cases where n is close to or equal to len(bank)."""
+        # n == len(bank): should return the full number unchanged
+        self.assertEqual(find_max_joltage_n_batteries("123456", 6), 123456)
+        self.assertEqual(find_max_joltage_n_batteries("987654321", 9), 987654321)
+        # n == len(bank) - 1: should drop a single smallest digit while preserving order
+        self.assertEqual(find_max_joltage_n_batteries("123456789", 8), 23456789)
+        self.assertEqual(find_max_joltage_n_batteries("987654321", 8), 98765432)
+
     def test_find_max_joltage_12_batteries_example1(self):
         """Test Part 2 example 1: 987654321111111 should give 987654321111"""
         self.assertEqual(find_max_joltage_n_batteries("987654321111111", 12), 987654321111)

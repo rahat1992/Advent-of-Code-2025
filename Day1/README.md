@@ -23,7 +23,7 @@ The puzzle has two parts, both solved in `solution.py`.
 From this directory:
 
 ```bash
-python solution.py
+python3 solution.py
 ```
 
 This will:

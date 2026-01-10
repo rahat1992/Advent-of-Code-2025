@@ -166,6 +166,29 @@ class TestSafeSolution(unittest.TestCase):
 
         os.remove(test_file)
 
+    def test_empty_input(self):
+        """Empty input file should return 0 for both parts."""
+        test_file = "test_empty.txt"
+        with open(test_file, 'w') as f:
+            pass
+
+        result1 = solve_part1(test_file)
+        result2 = solve_part2(test_file)
+        self.assertEqual(result1, 0)
+        self.assertEqual(result2, 0)
+        os.remove(test_file)
+
+    def test_part2_large_left_rotation_multiple_cycles(self):
+        """Test Part 2 with a large left rotation that includes many full cycles."""
+        test_file = "test_large_left.txt"
+        with open(test_file, 'w') as f:
+            # 1234 clicks left from 50: 12 full cycles, remainder 34 (no extra wrap), so 12 hits on 0.
+            f.write("L1234\n")
+
+        result = solve_part2(test_file)
+        self.assertEqual(result, 12)
+        os.remove(test_file)
+
     def test_actual_input_part1(self):
         """Test Part 1 with the actual input file."""
         if os.path.exists("input.txt"):

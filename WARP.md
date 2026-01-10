@@ -24,37 +24,45 @@ Solutions are meant to be run from within each day directory so that relative pa
 
 - **Day 1**
   - From the repository root:
-    - Change into the directory:
-      - `cd Day1`
+    - `cd Day1`
     - Run the solution (reads `Day1/input.txt`):
-      - `python solution.py`
+      - `python3 solution.py`
 - **Day 2**
   - From the repository root:
     - `cd Day2`
     - Run the solution (reads `Day2/input.txt`):
-      - `python solution.py`
+      - `python3 solution.py`
+- **Day 3**
+  - From the repository root:
+    - `cd Day3`
+    - Run the solution (reads `Day3/input.txt`):
+      - `python3 solution.py`
 
-**Pattern for new days:** create a `DayN/` directory with a `solution.py` that reads `input.txt` from the current working directory, then run it by `cd DayN && python solution.py`.
+**Pattern for new days:** create a `DayN/` directory with a `solution.py` that reads `input.txt` from the current working directory, then run it by `cd DayN && python3 solution.py`.
 
 ### Run tests for a single day
 
 Each day has a dedicated `test_solution.py` using `unittest`. Tests are designed to be run from inside the day's directory.
 
 - **Run all tests for a day**
-  - Day 1: `cd Day1 && python -m unittest`
-  - Day 2: `cd Day2 && python -m unittest`
+  - Day 1: `cd Day1 && python3 -m unittest`
+  - Day 2: `cd Day2 && python3 -m unittest`
+  - Day 3: `cd Day3 && python3 -m unittest`
 
 - **Run a specific test module**
-  - Day 1: `cd Day1 && python -m unittest test_solution`
-  - Day 2: `cd Day2 && python -m unittest test_solution`
+  - Day 1: `cd Day1 && python3 -m unittest test_solution`
+  - Day 2: `cd Day2 && python3 -m unittest test_solution`
+  - Day 3: `cd Day3 && python3 -m unittest test_solution`
 
 - **Run a single test case or method**
   - Example (Day 1, specific test method):
-    - `cd Day1 && python -m unittest test_solution.TestSafeSolution.test_part1_example`
+    - `cd Day1 && python3 -m unittest test_solution.TestSafeSolution.test_part1_example`
   - Example (Day 2, full test case class):
-    - `cd Day2 && python -m unittest test_solution.TestGiftShop`
+    - `cd Day2 && python3 -m unittest test_solution.TestGiftShop`
+  - Example (Day 3, full test case class):
+    - `cd Day3 && python3 -m unittest test_solution.TestLobby`
 
-When running tests from the repository root via discovery (e.g., `python -m unittest discover -s Day1 -p "test_*.py"`), note that tests which reference `input.txt` use a relative path; those checks will only run if `input.txt` is present in the **current working directory**.
+When running tests from the repository root via discovery (e.g., `python3 -m unittest discover -s Day1 -p "test_*.py"`), note that tests which reference `input.txt` use a relative path; those checks will only run if `input.txt` is present in the **current working directory**.
 
 ## Architecture and conventions
 
@@ -72,7 +80,7 @@ Each Advent of Code day is isolated in its own directory, following a consistent
 
 - **Day 1 (`Day1/`) – Secret Entrance**
   - Implements two solver functions in `solution.py`:
-    - `solve_part1(input_file)` – counts how many times a dial ends at position `0` after each rotation.
+    - `solve_part1(input_file)` – counts how many times the dial ends at position `0` after each rotation.
     - `solve_part2(input_file)` – counts every time the dial passes through or lands on `0` during rotations, accounting for full cycles and partial wraps.
   - `Day1/README.md` documents the puzzle, dial mechanics, and the reasoning behind both parts; refer there for detailed problem context.
   - `test_solution.py` contains a comprehensive test suite, including:
@@ -80,14 +88,29 @@ Each Advent of Code day is isolated in its own directory, following a consistent
     - Edge cases for wrapping behaviour.
     - Optional checks against the actual `input.txt` if present.
 
-- **Day 2 (`Day2/`) – Invalid Product IDs**
+- **Day 2 (`Day2/`) – Gift Shop / Invalid Product IDs**
   - `solution.py` defines:
-    - `is_invalid_id(num)` – returns `True` if a numeric ID consists of a digit/digit-sequence repeated exactly twice (e.g., `55`, `6464`, `123123`), with safeguards against leading-zero artefacts.
-    - `solve_part1(input_file)` – parses a comma-separated list of inclusive ranges like `11-22,95-115,...`, scans all IDs in each range, and returns `(total_sum_of_invalid_ids, list_of_invalid_ids)`.
+    - `is_invalid_id_part1(num)` – Part 1 rule: a numeric ID made of a digit/digit-sequence repeated **exactly twice** (e.g., `55`, `6464`, `123123`), with safeguards against leading-zero artefacts.
+    - `is_invalid_id_part2(num)` – Part 2 rule: a numeric ID made of a digit/digit-sequence repeated **at least twice** (e.g., `12341234`, `123123123`, `1111111`).
+    - `solve_part1(input_file)` – parses a comma-separated list of inclusive ranges like `11-22,95-115,...`, scans all IDs under the Part 1 rule, and returns `(total_sum_of_invalid_ids, list_of_invalid_ids)`.
+    - `solve_part2(input_file)` – reuses the same ranges but applies the Part 2 rule.
+  - `Day2/README.md` describes both parts and how the ID rules differ.
   - `test_solution.py`:
-    - Thoroughly exercises `is_invalid_id` for different lengths and patterns.
-    - Verifies behaviour on example ranges and the full example input string.
-    - Optionally validates the actual puzzle answer when `input.txt` exists.
+    - Thoroughly exercises both invalid-ID predicates across many patterns and lengths.
+    - Verifies behaviour on the example ranges and the full example input string.
+    - Optionally validates the actual puzzle answers for both parts when `input.txt` exists.
+
+- **Day 3 (`Day3/`) – Lobby / Battery Banks**
+  - `solution.py` defines:
+    - `find_max_joltage_n_batteries(bank, n)` – greedy selector that chooses exactly `n` digits from a bank (string of digits) in order to form the largest possible number.
+    - `find_max_joltage(bank)` – convenience wrapper for `n = 2` (Part 1 behaviour).
+    - `solve_part1(input_file)` – for each line/bank, selects 2 digits and sums the resulting per-bank joltages.
+    - `solve_part2(input_file)` – for each bank, selects 12 digits and sums the resulting joltages.
+  - `Day3/README.md` documents the battery-bank model, the greedy selection strategy, and both parts.
+  - `test_solution.py`:
+    - Covers the example banks and totals from the problem statement.
+    - Exercises the selector with ascending, descending, repeated, and mixed digits, and multiple `n` values (including near full-length selections).
+    - Optionally validates the actual puzzle answers for both parts when `input.txt` exists.
 
 ### Extending the repository
 

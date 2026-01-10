@@ -28,7 +28,7 @@ Whitespace and newlines are tolerated as long as the `start-end` and comma struc
 From this directory:
 
 ```bash
-python solution.py
+python3 solution.py
 ```
 
 This will:
