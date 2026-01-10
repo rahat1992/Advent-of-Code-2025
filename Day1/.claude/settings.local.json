@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(python solution.py:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(cat:*)"
     ]
   }
 }
