@@ -22,25 +22,10 @@ All commands below assume a recent CPython 3 is available on `PATH`. There are n
 
 Solutions are meant to be run from within each day directory so that relative paths to `input.txt` work correctly.
 
-- **Day 1**
+- **Any implemented day (e.g., `Day1/`–`Day5/`)**
   - From the repository root:
-    - `cd Day1`
-    - Run the solution (reads `Day1/input.txt`):
-      - `python3 solution.py`
-- **Day 2**
-  - From the repository root:
-    - `cd Day2`
-    - Run the solution (reads `Day2/input.txt`):
-      - `python3 solution.py`
-- **Day 3**
-  - From the repository root:
-    - `cd Day3`
-    - Run the solution (reads `Day3/input.txt`):
-      - `python3 solution.py`
-- **Day 4**
-  - From the repository root:
-    - `cd Day4`
-    - Run the solution (reads `Day4/input.txt`):
+    - `cd DayN`
+    - Run the solution (reads `DayN/input.txt`):
       - `python3 solution.py`
 
 **Pattern for new days:** create a `DayN/` directory with a `solution.py` that reads `input.txt` from the current working directory, then run it by `cd DayN && python3 solution.py`.
@@ -50,26 +35,16 @@ Solutions are meant to be run from within each day directory so that relative pa
 Each day has a dedicated `test_solution.py` using `unittest`. Tests are designed to be run from inside the day's directory.
 
 - **Run all tests for a day**
-  - Day 1: `cd Day1 && python3 -m unittest`
-  - Day 2: `cd Day2 && python3 -m unittest`
-  - Day 3: `cd Day3 && python3 -m unittest`
-  - Day 4: `cd Day4 && python3 -m unittest`
+  - Any day: `cd DayN && python3 -m unittest`
 
 - **Run a specific test module**
-  - Day 1: `cd Day1 && python3 -m unittest test_solution`
-  - Day 2: `cd Day2 && python3 -m unittest test_solution`
-  - Day 3: `cd Day3 && python3 -m unittest test_solution`
-  - Day 4: `cd Day4 && python3 -m unittest test_solution`
+  - Any day: `cd DayN && python3 -m unittest test_solution`
 
 - **Run a single test case or method**
   - Example (Day 1, specific test method):
     - `cd Day1 && python3 -m unittest test_solution.TestSafeSolution.test_part1_example`
   - Example (Day 2, full test case class):
     - `cd Day2 && python3 -m unittest test_solution.TestGiftShop`
-  - Example (Day 3, full test case class):
-    - `cd Day3 && python3 -m unittest test_solution.TestLobby`
-  - Example (Day 4, full test case class):
-    - `cd Day4 && python3 -m unittest test_solution.TestPrintingDepartment`
 
 When running tests from the repository root via discovery (e.g., `python3 -m unittest discover -s Day1 -p "test_*.py"`), note that tests which reference `input.txt` use a relative path; those checks will only run if `input.txt` is present in the **current working directory**.
 
@@ -134,6 +109,24 @@ Each Advent of Code day is isolated in its own directory, following a consistent
     - Exercises adjacency counting on corners, edges, center cells, and isolated rolls.
     - Verifies accessibility counts on dense clusters, lines, crosses, and sparse patterns, including boundary cases for exactly 3 vs 4 neighbors.
     - Confirms the iterative removal logic on the example and synthetic grids, and validates the actual puzzle answers when `input.txt` exists.
+
+- **Day 5 (`Day5/`) – Cafeteria / Fresh Ingredients**
+  - `solution.py` defines:
+    - `parse_input(input_file)` – parses a two-section file into a list of inclusive freshness ranges and a list of ingredient IDs.
+    - `is_fresh(ingredient_id, ranges)` – predicate indicating whether an ID falls within any freshness range.
+    - `count_fresh_ingredients(ranges, ingredient_ids)` – counts how many available ingredient IDs are fresh (Part 1 core).
+    - `merge_ranges(ranges)` – merges overlapping/adjacent ranges into a minimal non-overlapping set.
+    - `count_total_fresh_ids(ranges)` – counts all fresh IDs implied by the merged ranges (Part 2 core).
+    - `solve_part1(input_file)` – parses the file and returns the number of available ingredient IDs that are fresh.
+    - `solve_part2(input_file)` – returns the total number of distinct fresh IDs after merging overlapping ranges.
+  - `test_solution.py` (`TestCafeteria`) provides:
+    - Example-driven tests that mirror the puzzle statement, including the sample input and expected counts for both parts.
+    - Extensive property-style coverage for `is_fresh`, `merge_ranges`, and `count_total_fresh_ids` (boundaries, overlaps, adjacency, empty/large ranges).
+    - Optional assertions against the real `input.txt` that lock in the final puzzle answers for future refactors.
+
+- **Day 6 (`Day6/`) – Unimplemented stub**
+  - Contains `input.txt` and `problem.txt` only; no `solution.py` or `test_solution.py` yet.
+  - When implementing Day 6, follow the "Extending the repository" guidelines below to mirror the existing per-day structure.
 
 ### Extending the repository
 
