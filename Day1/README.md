@@ -75,7 +75,7 @@ High-level approach:
      - `full_cycles = distance // 100`
      - Each full cycle guarantees exactly one time the dial points at `0`, so add `full_cycles` to `count_zeros`.
    - Handle the **remaining clicks** (`remaining = distance % 100`) to see if we cross `0` in the partial movement:
-     - For `L` (moving left/decreasing): if `remaining > position`, we must wrap past `0` during this partial movement, so increment `count_zeros` once.
+     - For `L` (moving left/decreasing): if the dial is **not already at 0** and `remaining >= position`, we must land on or wrap past `0` during this partial movement, so increment `count_zeros` once.
      - For `R` (moving right/increasing): if `position + remaining >= 100`, we wrap past `99` back to `0`, so increment `count_zeros` once.
    - Update `position` to the final dial value after the rotation using modulo 100.
 4. After processing all rotations, return `count_zeros`.

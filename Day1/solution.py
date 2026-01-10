@@ -61,8 +61,11 @@ def solve_part2(input_file):
 
             # Check if we cross 0 in the partial cycle
             remaining = distance % 100
-            if remaining > position:
-                # We crossed 0
+            # If we're not starting at 0 and the remaining clicks are at least
+            # the current position, we will land on or pass through 0 once
+            # more during this partial segment.
+            if position != 0 and remaining >= position:
+                # We crossed or landed on 0
                 count_zeros += 1
 
         else:  # direction == 'R'

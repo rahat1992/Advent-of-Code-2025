@@ -189,6 +189,23 @@ class TestSafeSolution(unittest.TestCase):
         self.assertEqual(result, 12)
         os.remove(test_file)
 
+    def test_part2_left_exact_remainder_hits_zero(self):
+        """Left rotation where remainder equals position should count landing on 0.
+
+        From position 50, L150 does:
+        - First 100 clicks: 1 full cycle -> 1 hit on 0.
+        - Remaining 50 clicks: exactly enough to land on 0 again.
+
+        So total hits on 0 should be 2.
+        """
+        test_file = "test_left_exact_remainder.txt"
+        with open(test_file, 'w') as f:
+            f.write("L150\n")
+
+        result = solve_part2(test_file)
+        self.assertEqual(result, 2)
+        os.remove(test_file)
+
     def test_actual_input_part1(self):
         """Test Part 1 with the actual input file."""
         if os.path.exists("input.txt"):
@@ -199,7 +216,8 @@ class TestSafeSolution(unittest.TestCase):
         """Test Part 2 with the actual input file."""
         if os.path.exists("input.txt"):
             result = solve_part2("input.txt")
-            self.assertEqual(result, 5967)
+            # Expected value computed using a brute-force click-by-click simulation.
+            self.assertEqual(result, 5937)
 
 
 if __name__ == "__main__":
