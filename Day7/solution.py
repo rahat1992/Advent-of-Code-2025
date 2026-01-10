@@ -86,12 +86,72 @@ def solve_part1(input_file):
     return splits
 
 
+def simulate_quantum_particle(grid, start_row, start_col):
+    """
+    Simulate a quantum tachyon particle that takes both paths at each splitter.
+    Returns the number of unique timelines.
+
+    Use dynamic programming: track the number of distinct paths to each position.
+    """
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+
+    # Track number of paths to each position: {(row, col): num_paths}
+    current_positions = {(start_row, start_col): 1}
+    total_exited = 0
+
+    # Process row by row
+    for current_row in range(start_row, rows):
+        next_positions = {}
+
+        for (row, col), num_paths in current_positions.items():
+            if row != current_row:
+                continue
+
+            # Move particle down
+            next_row = row + 1
+
+            # Check if particle exits the manifold
+            if next_row >= rows:
+                # These paths complete - count them
+                total_exited += num_paths
+                continue
+
+            # Check what the particle encounters
+            if grid[next_row][col] == '^':
+                # Particle hits a splitter - it takes BOTH paths
+                left_col = col - 1
+                right_col = col + 1
+
+                if left_col >= 0:
+                    if (next_row, left_col) not in next_positions:
+                        next_positions[(next_row, left_col)] = 0
+                    next_positions[(next_row, left_col)] += num_paths
+
+                if right_col < cols:
+                    if (next_row, right_col) not in next_positions:
+                        next_positions[(next_row, right_col)] = 0
+                    next_positions[(next_row, right_col)] += num_paths
+            else:
+                # Particle continues downward
+                if (next_row, col) not in next_positions:
+                    next_positions[(next_row, col)] = 0
+                next_positions[(next_row, col)] += num_paths
+
+        # Update current_positions for next iteration
+        current_positions = {pos: count for pos, count in current_positions.items() if pos[0] != current_row}
+        current_positions.update(next_positions)
+
+    return total_exited
+
+
 def solve_part2(input_file):
     """
-    Solve Part 2: Placeholder for when Part 2 is revealed.
+    Solve Part 2: Count the number of different timelines.
     """
-    # Part 2 not yet available
-    return None
+    grid, start_row, start_col = parse_manifold(input_file)
+    timelines = simulate_quantum_particle(grid, start_row, start_col)
+    return timelines
 
 
 if __name__ == "__main__":
