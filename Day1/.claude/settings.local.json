@@ -3,7 +3,10 @@
     "allow": [
       "Bash(python solution.py:*)",
       "Bash(python3:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(python test_solution.py:*)",
+      "Bash(timeout 180 python3:*)",
+      "Bash(timeout 60 python3:*)"
     ]
   }
 }
