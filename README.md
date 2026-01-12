@@ -161,6 +161,27 @@ Below is a high-level summary of each day's puzzle, the core algorithms or data 
       - Track the maximum area that passes this test.
 - **Relationship:** Part 1 is purely combinatorial over corners; Part 2 adds a **geometric feasibility** constraint that relies on understanding the red polygon’s shape and its interior. The same corner enumeration is used; Part 2 layers in geometry and range-checking to filter out invalid rectangles.
 
+### Day 10 – Factory (Indicator Lights & Joltages)
+
+- **Theme:** Each line describes a machine with indicator lights, buttons, and joltage requirements. Buttons toggle lights in one mode and increment joltage counters in another; you must configure every machine with as few button presses as possible.
+- **Part 1:**
+  - Lights start all off; each button toggles a subset of lights (on ↔ off).
+  - You may press each button any number of times, but since toggling is modulo 2, only the parity (0/1) matters.
+  - **Algorithm:**
+    - Model lights as a bitmask and each button as a bitmask toggle.
+    - Use dynamic programming over buttons: for each button, update a map `state → min_presses` by either skipping or applying that button (XOR the bitmask and add 1 to the press count).
+    - The answer for a machine is the minimum press count that reaches the target light pattern; sum these across all machines.
+- **Part 2:**
+  - Ignore the indicator diagrams; now each button increments a subset of joltage counters, and each machine has target joltage levels.
+  - You can press buttons any non-negative integer number of times; you must reach the exact target vector with minimum total presses.
+  - **Algorithm:**
+    - Build an integer matrix `A` where column `j` encodes which counters button `j` increments, and a target vector `b` of joltages.
+    - Solve `A x = b` for non-negative integer `x` minimizing `sum(x_j)`:
+      - Use Gaussian elimination over rationals to get the general solution.
+      - Search over a bounded space of free variables for the lowest-sum integer solution, with a greedy/heuristic fallback for larger systems.
+      - For very small instances, a BFS/DP over counter states is also available.
+- **Relationship:** Both parts share the same button definitions and machine lines; Part 1 interprets them as XOR toggles over GF(2), while Part 2 interprets them as increments in an integer linear system. Conceptually, Part 2 lifts the boolean problem into a Diophantine optimization problem over the same wiring.
+
 ---
 
 ## Extending the repository
@@ -176,4 +197,4 @@ New days follow the same pattern:
    - `README.md` – a short description of the puzzle, approach, and how to run it.
 3. Prefer small, composable helpers whose behavior is unit-tested independently of I/O.
 
-See the existing days (especially Days 1–9) for concrete patterns to reuse.
+See the existing days (especially Days 1–10) for concrete patterns to reuse.
