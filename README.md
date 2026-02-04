@@ -182,6 +182,33 @@ Below is a high-level summary of each day's puzzle, the core algorithms or data 
       - For very small instances, a BFS/DP over counter states is also available.
 - **Relationship:** Both parts share the same button definitions and machine lines; Part 1 interprets them as XOR toggles over GF(2), while Part 2 interprets them as increments in an integer linear system. Conceptually, Part 2 lifts the boolean problem into a Diophantine optimization problem over the same wiring.
 
+### Day 11 – Reactor (Device Graph Path Counting)
+
+- **Theme:** A directed acyclic graph of named electrical devices connecting a server rack to a reactor. Data flows through device outputs; you must count distinct paths through the network.
+- **Part 1:**
+  - Count all distinct paths from device `you` to device `out` in the directed graph.
+  - **Algorithm:** Recursive DFS with `@lru_cache` memoization on a DAG. Each node's path count is computed once; base cases are 1 at `out` and 0 at dead ends. Time complexity O(V + E).
+- **Part 2:**
+  - Count paths from `svr` to `out` that pass through **both** `dac` (digital-to-analog converter) and `fft` (fast Fourier transform), in any order.
+  - **Algorithm:** DFS with memoization keyed on `(node, visited_required)`, where `visited_required` is a frozenset tracking which required nodes have been seen so far. A path is counted only if all required nodes are visited before reaching `out`. Complexity O((V + E) * 2^k) where k is the number of required nodes.
+- **Relationship:** Part 1 is unconstrained path counting on a DAG; Part 2 adds a **visit constraint** by augmenting the memoization state with a subset of required waypoints. The same DFS structure underlies both, with Part 2 lifting the state space from nodes to (node, constraint-set) pairs.
+
+### Day 12 – Christmas Tree Farm (Present Packing)
+
+- **Theme:** Fitting oddly-shaped presents (heptominoes) into rectangular regions under Christmas trees. Shapes can be rotated and flipped; pieces cannot overlap but can interlock through empty cells within a shape's bounding box.
+- **Part 1:**
+  - For each region, determine whether all listed presents can fit into the given width × height grid.
+  - **Algorithm:**
+    - **Shape orientation:** Generate all unique orientations per shape via the 8 transforms of the dihedral group D4 (4 rotations × 2 reflections), deduplicating via normalized frozensets.
+    - **Fast-path checks** (applied in order):
+      1. **Area check:** If total piece area exceeds grid area, reject immediately.
+      2. **Box-tiling fast path:** All shapes fit within a 3×3 bounding box. If `total_pieces ≤ floor(W/3) × floor(H/3)`, we can tile the grid with non-overlapping 3×3 boxes and place one piece per box — always feasible.
+    - **Backtracking fallback:** Cell-scanning approach with integer bitmask grids for fast conflict detection. Iterates cells left-to-right, top-to-bottom; at each empty cell, tries all piece placements whose leftmost occupied cell is the current cell. For exact cover (`total_area == grid_area`), failing to cover a cell prunes immediately; for partial cover, uncoverable cells are skipped via loop continuation (not recursive calls) to avoid exponential branching.
+    - For the actual input (1000 regions, grids 35×35 to 50×50), all regions are resolved by the area check or box-tiling fast path — no backtracking needed.
+- **Part 2:**
+  - Story-only free star; no additional computation required.
+- **Relationship:** The backtracking solver handles the small example grids where interlocking at high density is possible, while the mathematical fast paths handle the large real input efficiently. The box-tiling insight — that all shapes share a common 3×3 bounding box — collapses a hard combinatorial problem into a simple arithmetic check for large grids.
+
 ---
 
 ## Extending the repository
@@ -197,4 +224,4 @@ New days follow the same pattern:
    - `README.md` – a short description of the puzzle, approach, and how to run it.
 3. Prefer small, composable helpers whose behavior is unit-tested independently of I/O.
 
-See the existing days (especially Days 1–10) for concrete patterns to reuse.
+See the existing days (especially Days 1–12) for concrete patterns to reuse.
